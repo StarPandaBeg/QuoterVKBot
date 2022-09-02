@@ -3,3 +3,6 @@ TOKEN = ""
 
 # ID сообщества
 GROUP_ID = 0
+
+# Использовать whitelist (фильтр собеседников по peer_id)
+USE_WHITELIST = True
