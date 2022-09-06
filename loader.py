@@ -1,8 +1,8 @@
-import json
 from fuzzywuzzy import process
 
-with open('quotes.json', 'r', encoding='utf-8') as f:
-    QUOTES = json.load(f)
+from func import load_json
+
+QUOTES = load_json('quotes.json')
 
 def load_by_index(i):
     return QUOTES[i-1]

@@ -1,15 +1,14 @@
-import json
 from random import randint
+import re
+
 from vk_api.bot_longpoll import VkBotMessageEvent
+
 import loader
+from config import USE_WHITELIST
+from func import load_json
 
-from config import *
-
-if (USE_WHITELIST):
-    with open('whitelist.json', 'r', encoding='utf-8') as f:
-        WHITELIST = json.load(f)
-else:
-    WHITELIST = []
+WHITELIST = load_json('whitelist.json') if USE_WHITELIST else []
+REGEX = r'^(\[.*\],?\s?)?(.*)$'
 
 def handle_message(ev: VkBotMessageEvent, api):
     peer_id = int(ev.object.message['peer_id'])
@@ -17,9 +16,6 @@ def handle_message(ev: VkBotMessageEvent, api):
         return
 
     text = get_text(ev)
-    if not text.strip():
-        return
-
     quote = ''
     try:
         if (text.isnumeric()):
@@ -38,6 +34,7 @@ def send_resp(ev: VkBotMessageEvent, api, msg):
 
 def get_text(ev):
     raw = ev.obj.message['text']
-    if raw.startswith('['):
-        raw = raw[raw.find(']')+2:]
-    return raw
+    if not raw:
+        return ''
+    groups = re.match(REGEX, raw).groups()
+    return groups[1].strip()
