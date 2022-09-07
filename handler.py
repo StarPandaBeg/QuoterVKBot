@@ -34,7 +34,9 @@ def send_resp(ev: VkBotMessageEvent, api, msg):
 
 def get_text(ev):
     raw = ev.obj.message['text']
-    if not raw:
+    if not raw or len(raw) == 0:
         return ''
+    if raw[0] == '/':
+        return raw[1:]
     groups = re.match(REGEX, raw).groups()
     return groups[1].strip()
