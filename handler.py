@@ -18,13 +18,12 @@ def handle_message(ev: VkBotMessageEvent, api):
     text = get_text(ev)
     quote = ''
     try:
-        if (text.isnumeric()):
-            quote = loader.load_by_index(int(text))
-        else:
-            quote = loader.load_fuzzy(text)
+        quote = loader.load_by_index(int(text))  
+    except ValueError:
+        quote = loader.load_fuzzy(text)
     except:
         send_resp(ev, api, 'Цитата не найдена')
-        return        
+        return   
 
     send_resp(ev, api, quote)
 
